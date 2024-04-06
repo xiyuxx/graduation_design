@@ -1,24 +1,28 @@
 <script setup lang="ts">
-interface MenuItem{
-  title: string,
-  items:Item[]
-}
-interface Item{
-  itemListIcon:string,
-  itemList:string
-}
-  const menuItem = defineProps<MenuItem[]>()
+
+import {Menu} from "../types/subMenu";
+const {menu}= defineProps<{
+  menu:Menu
+}>()
+console.log(menu.defaultPath)
 </script>
-
 <template>
-  <div>
-    <div v-for="menu in menuItem">
-      <p>{{menu.title}}</p>
-      <el-menu></el-menu>
-    </div>
-  </div>
+  <template v-for="(part,i) in menu.menus">
+        <el-menu-item-group :title="part.title">
+          <el-menu-item
+              v-for="(item,j) in part.items"
+              :index="i.toString() + '-' + j.toString()"
+              class="mr-4  rounded-md h-10 mb-4">
+            <router-link :to="menu.defaultPath+ item.itemPath">
+            <el-icon>
+              <component :is="item.itemIcon"/>
+            </el-icon>
+            <el-text>{{item.itemName}}</el-text>
+            </router-link>
+          </el-menu-item>
+        </el-menu-item-group>
+  </template>
 </template>
-
 <style scoped>
 
 </style>

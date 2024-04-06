@@ -27,23 +27,29 @@ const isCollapse = ref(true)
                 <template #title>工作台</template>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="2">
-            <el-icon><Files/> </el-icon>
-            <template #title>项目管理</template>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <el-icon><Finished/> </el-icon>
-            <template #title>测试管理</template>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <el-icon><Management/> </el-icon>
-            <template #title>知识管理</template>
-          </el-menu-item>
+          <router-link to="/pjm">
+            <el-menu-item index="2">
+              <el-icon><Files/> </el-icon>
+              <template #title>项目管理</template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/testHub">
+            <el-menu-item index="3">
+              <el-icon><Finished/> </el-icon>
+              <template #title>测试管理</template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/wiki">
+            <el-menu-item index="4">
+              <el-icon><Management/> </el-icon>
+              <template #title>知识管理</template>
+            </el-menu-item>
+          </router-link>
+
         </el-menu>
       </el-aside>
-      <el-main class="px-0 py-0 grow ">
-        <RouterView class="min-w-full"></RouterView>
-        <el-button @click="isCollapse = !isCollapse">zhankai</el-button>
+      <el-main class="px-0 py-0 grow w-full">
+        <router-view></router-view>
       </el-main>
     </el-container>
   </div>

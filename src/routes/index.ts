@@ -1,4 +1,7 @@
 import {createRouter,createWebHistory} from "vue-router";
+
+import Login from "../views/Login.vue"
+
 import WorkStation from '../views/workStation/Index.vue'
 import WorkStationHome from "../views/workStation/home/Index.vue"
 import HomeOverview from "../views/workStation/home/Overview.vue"
@@ -10,115 +13,151 @@ import HomeAssigned from "../views/workStation/home/Assigned.vue"
 import HomeParticipated from "../views/workStation/home/Participated.vue"
 
 import WorkInsight from "../views/workStation/insight/Index.vue"
-
 import WorkDashboards from "../views/workStation/dashboards/Index.vue"
+import WorkSpace from "../views/WorkSpace.vue";
+import Register from "../views/Register.vue";
 
 const routes = [
     {
-        path:'/',
-        redirect:'/workStation',
+        path:'/login',
+        component: Login
     },
     {
-        path: '/workStation',
-        component: WorkStation,
-        children:[
+      path:'/register',
+        component: Register
+    },
+    {
+        path:'/',
+        component: WorkSpace,
+        redirect:'/workStation',
+        children: [
             {
-                path:'',
-                redirect:'/workStation/home'
-            },
-            {
-                path: 'home',
-                component: WorkStationHome,
+                path: '/workStation',
+                component: WorkStation,
                 children:[
                     {
                         path:'',
-                        redirect:'/workStation/home/overview',
+                        redirect:'/workStation/home'
                     },
                     {
-                        path:'overview',
-                        component: HomeOverview
+                        path: 'home',
+                        component: WorkStationHome,
+                        children:[
+                            {
+                                path:'',
+                                redirect:'/workStation/home/overview',
+                            },
+                            {
+                                path:'overview',
+                                component: HomeOverview
+                            },
+                            {
+                                path:'works',
+                                component: HomeWorks
+                            },
+                            {
+                                path:'reminders',
+                                component: HomeReminders
+                            },
+                            {
+                                path:'mine',
+                                component: HomeMine
+                            },
+                            {
+                                path:'created',
+                                component: HomeCreated
+                            },
+                            {
+                                path:'assigned',
+                                component: HomeAssigned
+                            },
+                            {
+                                path:'participated',
+                                component: HomeParticipated
+                            }
+                        ]
                     },
                     {
-                        path:'works',
-                        component: HomeWorks
+                        path:'insight',
+                        component: WorkInsight,
                     },
                     {
-                        path:'reminders',
-                        component: HomeReminders
-                    },
-                    {
-                        path:'mine',
-                        component: HomeMine
-                    },
-                    {
-                        path:'created',
-                        component: HomeCreated
-                    },
-                    {
-                        path:'assigned',
-                        component: HomeAssigned
-                    },
-                    {
-                        path:'participated',
-                        component: HomeParticipated
+                        path: 'dashboards',
+                        component: WorkDashboards
                     }
                 ]
             },
             {
-                path:'insight',
-                component: WorkInsight,
+                path:'/pjm',
+                component: ()=>import("../views/pjManagement/Index.vue"),
+                children: [
+                    {
+                        path: '',
+                        redirect: '/pjm/projects'
+                    },
+                    {
+                        path: 'projects',
+                        component: ()=>import("../views/pjManagement/Projects.vue")
+                    },
+                    {
+                        path: 'organization',
+                        component: ()=>import("../views/pjManagement/Organization.vue")
+                    },
+                    {
+                        path: 'portfolios',
+                        component: ()=>import("../views/pjManagement/Portfolios.vue")
+                    },
+                    {
+                        path: 'queries',
+                        component: ()=>import("../views/pjManagement/Queries.vue")
+                    },
+                    {
+                        path: 'team',
+                        component: ()=>import("../views/pjManagement/Team.vue")
+                    }
+                ]
             },
             {
-                path: 'dashboards',
-                component: WorkDashboards
+                path:'/testHub',
+                component: ()=>import("../views/testHub/Index.vue"),
+                children: [
+                    {
+                        path: '',
+                        redirect: '/testHub/libraries',
+                    },
+                    {
+                        path: 'libraries',
+                        component: ()=>import("../views/testHub/Libraries.vue")
+                    },
+                    {
+                        path: 'continue',
+                        component: ()=>import("../views/testHub/Continue.vue")
+                    },
+                    {
+                        path: 'obliged',
+                        component: ()=>import("../views/testHub/Obliged.vue")
+                    },
+                    {
+                        path: 'organization',
+                        component: ()=>import("../views/testHub/Organization.vue")
+                    },
+                    {
+                        path: 'team',
+                        component: ()=>import("../views/testHub/Team.vue")
+                    },
+                    {
+                        path: 'participated',
+                        component: ()=>import("../views/testHub/Participated.vue")
+                    },
+                ]
+            },
+            {
+                path: '/wiki',
+                component: ()=>import("../views/wiki/Index.vue")
             }
         ]
     },
-    {
-        path:'/pjm',
-        component: ()=>import("../views/pjManagement/Index.vue"),
-        children: [
-            {
-                path: '',
-                redirect: '/pjm/projects'
-            },
-            {
-                path: 'projects',
-                component: ()=>import("../views/pjManagement/Projects.vue")
-            },
-            {
-                path: 'organization',
-                component: ()=>import("../views/pjManagement/Organization.vue")
-            },
-            {
-                path: 'portfolios',
-                component: ()=>import("../views/pjManagement/Portfolios.vue")
-            },
-            {
-                path: 'queries',
-                component: ()=>import("../views/pjManagement/Queries.vue")
-            },
-            {
-                path: 'team',
-                component: ()=>import("../views/pjManagement/Team.vue")
-            }
-        ]
-    },
-    {
-        path:'/testHub',
-        component: ()=>import("../views/testHub/Index.vue"),
-        children: [
-            {
-                path: '',
-                redirect: '/testHub/libraries',
-            },
 
-        ]
-    },
-    {
-        path: '/wiki',
-        component: ()=>import("../views/wiki/Index.vue")
-    }
 ]
 
 const router = createRouter({

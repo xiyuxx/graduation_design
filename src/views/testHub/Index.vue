@@ -1,10 +1,11 @@
 <script setup lang="ts">
-
+import {ref} from "vue";
 import {Finished} from "@element-plus/icons-vue";
-import HomePage from "../OuterPage.vue";
-import InnerPage from "../InnerPage.vue";
+import HomePage from "../../slots/TopBar.vue";
+import InnerPage from "../../slots/SideBar.vue";
 import SubMenu from "../../components/SubMenu.vue";
 import {Menu} from "../../types/subMenu";
+
 
 const menu:Menu = {
   defaultPath:'/testHub',
@@ -51,6 +52,7 @@ const menu:Menu = {
     }
   ]
 }
+const activeIndex = ref('0-0')
 </script>
 
 <template>
@@ -63,7 +65,7 @@ const menu:Menu = {
     <template #content>
       <inner-page>
         <template #subMenu>
-          <el-menu class="w-full">
+          <el-menu class="w-full" :default-active="activeIndex">
             <sub-menu :menu="menu"/>
           </el-menu>
         </template>

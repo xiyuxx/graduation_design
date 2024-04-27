@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {House} from "@element-plus/icons-vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {getDateTimeInfo} from "../../../utils/time.ts"
 import {Menu} from "../../../types/subMenu";
 import SubMenu from "../../../components/SubMenu.vue";
-import InnerPage from "../../InnerPage.vue";
+import InnerPage from "../../../slots/SideBar.vue";
+import {useUserStore} from "../../../stores/user.ts";
+
 
 
 const { period, dayOfWeek, month, day } = getDateTimeInfo();
@@ -55,15 +57,24 @@ const menu:Menu = {
   ]
 }
 
+const useUser = useUserStore()
+const user_name = ref("")
+const avatar = ref("")
+onMounted(async ()=>{
+  user_name.value = useUser.user_name
+  avatar.value = useUser.avatar
+  console.log(avatar.value)
+  console.log(user_name.value)
+})
 </script>
 <template>
 <inner-page>
   <template #subMenu>
     <!--      个人信息-->
     <div class="inline-flex items-center space-x-4 ">
-      <el-avatar :size="50"></el-avatar>
+      <el-avatar :size="50" :src="useUser.avatar"></el-avatar>
       <div>
-        <el-text>???,{{period}}好</el-text>
+        <el-text>{{useUser.user_name}},{{period}}好</el-text>
         <br>
         <el-text>今天是{{month}}月{{day}}，{{dayOfWeek}}</el-text>
       </div>

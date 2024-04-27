@@ -7,8 +7,10 @@ import App from "./App.vue";
 import ElementPlus from 'element-plus'
 import 'element-plus/es/components/button/style/css'
 import * as Icons from '@element-plus/icons-vue'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 const app = createApp(App)
 const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 Object.keys(Icons).forEach(key => {
     app.component(key, Icons[key as keyof typeof Icons])
 })

@@ -11,7 +11,7 @@ console.log(menu.defaultPath)
         <el-menu-item-group :title="part.title">
           <el-menu-item
               v-for="(item,j) in part.items"
-              :index="i.toString() + '-' + j.toString()"
+              :index="i + '-' + j"
               class="mr-4  rounded-md h-10 mb-4">
             <router-link :to="menu.defaultPath+ item.itemPath">
             <el-icon>

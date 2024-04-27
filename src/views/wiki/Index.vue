@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import HomePage from "../OuterPage.vue";
+import HomePage from "../../slots/TopBar.vue";
 import { Management} from "@element-plus/icons-vue";
 </script>
 

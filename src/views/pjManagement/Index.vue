@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
-import OuterPage from "../OuterPage.vue";
+import OuterPage from "../../slots/TopBar.vue";
 import {Files} from "@element-plus/icons-vue";
-import InnerPage from "../InnerPage.vue";
+import InnerSideBar from "../../slots/SideBar.vue";
 import SubMenu from "../../components/SubMenu.vue";
 import {Menu} from "../../types/subMenu";
+import {ref} from "vue";
 
 
 const menu:Menu = {
@@ -48,6 +49,8 @@ const menu:Menu = {
     }
   ]
 }
+
+const activeIndex = ref('0-0')
 </script>
 
 <template>
@@ -59,13 +62,16 @@ const menu:Menu = {
       <el-text class="px-4 ">项目管理</el-text>
     </template>
     <template #content>
-      <inner-page>
+      <inner-side-bar>
         <template #subMenu>
-          <el-menu class="w-full">
+          <el-menu
+              class="w-full"
+              :default-active="activeIndex"
+          >
             <sub-menu :menu="menu"/>
           </el-menu>
         </template>
-      </inner-page>
+      </inner-side-bar>
     </template>
   </outer-page>
 </template>

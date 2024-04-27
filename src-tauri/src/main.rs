@@ -11,7 +11,7 @@ fn greet(name: &str) -> String {
 
 
 pub fn main() {
-    tauri::Builder::default()
+    let _app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

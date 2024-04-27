@@ -2,7 +2,7 @@
 import {HomeFilled} from "@element-plus/icons-vue";
 
 import {ref} from "vue";
-import OuterPage from "../OuterPage.vue";
+import OuterPage from "../../slots/TopBar.vue";
 const activeIndex = ref('1')
 </script>
 <template>

@@ -15,15 +15,27 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "window": {
+        "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": [
+          "http://localhost:8000/*"
+        ]
       }
     },
     "windows": [
       {
+        "label": "login",
         "fullscreen": false,
-        "resizable": true,
-        "title": "SDA",
-        "width": 1920,
-        "height": 1080
+        "resizable": false,
+        "width": 400,
+        "height": 660,
+        "center": true,
+        "url": "/login"
       }
     ],
     "security": {

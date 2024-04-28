@@ -75,5 +75,8 @@ const activeIndex = ref('0-0')
 </template>
 
 <style scoped>
-
+:deep(.is-active){
+  background-color: #d4e5fa !important;
+  color: #7ac3f1 !important;
+}
 </style>

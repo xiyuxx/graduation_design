@@ -7,6 +7,7 @@ export interface Item{
     itemIcon:string; // 菜单图标
     itemName:string; // 菜单名
     itemPath:string;
+    itemColor?:string
 }
 
 export interface Menu{

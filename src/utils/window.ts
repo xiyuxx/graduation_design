@@ -4,8 +4,9 @@ export const enter_workSpace = ()=> {
         "fullscreen": false,
         "resizable": true,
         "title": "SDA",
-        "width": 1920,
-        "height": 1080,
+        "width": 1300,
+        "height": 900,
+        "center":true,
         "url": "/workStation"
     })
     webview.once('tauri://created',function (){
@@ -35,3 +36,7 @@ export const back_login = ()=> {
         console.log(e)
     })
 }
+
+// 打开项目|测试库|协作空间|知识管理,
+// 或者工作项|用例测试
+// export const start_work = (work_name:string)=>{}

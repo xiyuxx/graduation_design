@@ -54,9 +54,9 @@ const handleLogout = function (){
               <template #title>知识管理</template>
             </el-menu-item>
           </router-link>
+
           <el-menu-item>
             <el-button @click="handleLogout">登出</el-button>
-
           </el-menu-item>
 
         </el-menu>

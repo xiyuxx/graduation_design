@@ -97,7 +97,13 @@ const routes = [
                     },
                     {
                         path: 'projects',
-                        component: ()=>import("../views/pjManagement/Projects.vue")
+                        component: ()=>import("../views/pjManagement/Projects.vue"),
+                        children: [
+                            {
+                                path: ':logo',
+                                component: ()=>import("../views/pjManagement/ProjectDetail.vue")
+                            }
+                        ]
                     },
                     {
                         path: 'organization',

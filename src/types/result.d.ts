@@ -1,3 +1,5 @@
+import {Project} from "./project";
+
 export interface ReqResult<T>{
     data:T,
     msg:string,
@@ -15,6 +17,11 @@ type RegisterSuccessResult = {
 type SingleEditSuccessResult = {
     Success:string,
 }
+
+type ProjectCollector = {
+    collector:Project[]
+}
 type FailureResult = { Failure: null };
 type RegisterResult = RegisterSuccessResult | FailureResult;
 type SingleEditResult = SingleEditSuccessResult | FailureResult;
+type AllProjectResult = ProjectCollector | FailureResult;

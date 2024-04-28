@@ -27,6 +27,7 @@ export const useUserStore = defineStore('user',()=>{
     const gender = ref("");
     const email = ref("");
     const create_time = ref("")
+    const role = ref(1)
 
     const if_req = ref(false);
 
@@ -46,6 +47,7 @@ export const useUserStore = defineStore('user',()=>{
                 user_name.value = user_info.name
                 org_id.value = user_info.org_id;
                 org_name.value = user_info.org_name;
+                role.value = 1;
 
                 avatar.value = fetchAvatar(user_info.name)
                 console.log("头像来源：",fetchAvatar(user_info.name))
@@ -75,6 +77,7 @@ export const useUserStore = defineStore('user',()=>{
                 org_id.value = user_info.organization;
                 org_name.value = user_info.org_name;
                 create_time.value = user_info.create_time;
+                role.value = user_info.role;
 
                 if(user_info.phone) {phone.value = user_info.phone}
                 if(user_info.avatar){
@@ -134,6 +137,6 @@ export const useUserStore = defineStore('user',()=>{
 
     return {
         register,login,update,if_login,$reset,
-        user_id,user_name,avatar
+        user_id,user_name,avatar,role
     }
 } ,{persist:true})

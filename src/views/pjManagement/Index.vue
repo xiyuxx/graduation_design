@@ -5,30 +5,34 @@ import {Files} from "@element-plus/icons-vue";
 import InnerSideBar from "../../slots/SideBar.vue";
 import SubMenu from "../../components/SubMenu.vue";
 import {Menu} from "../../types/subMenu";
-import {ref} from "vue";
+import {provide, ref} from "vue";
+import {useProjectStore} from "../../stores/project.ts";
 
 
 const menu:Menu = {
   defaultPath :'/pjm',
   menus:[
     {
-
       title:'项目',
       items:[
         {
           itemIcon:'Menu',
           itemName:'全部项目',
-          itemPath:'/projects'
+          itemPath:'/projects',
+          itemColor:'#3158a6'
         },
         {
           itemIcon:'DataLine',
           itemName:'组织项目',
-          itemPath:'/organization'
+          itemPath:'/organization',
+          itemColor:'#2f8f23'
         },
         {
           itemIcon:'User',
           itemName:'团队项目',
-          itemPath:'/team'
+          itemPath:'/team',
+          itemColor:'#394c86'
+
         },
       ]
     },
@@ -38,19 +42,26 @@ const menu:Menu = {
         {
           itemIcon: 'Folder',
           itemName: '项目集',
-          itemPath: '/portfolios'
+          itemPath: '/portfolios',
+          itemColor:'#c72929'
         },
         {
           itemIcon: 'FolderRemove',
           itemName: '筛选器',
-          itemPath: '/queries'
+          itemPath: '/queries',
+          itemColor:'#d0913f'
         }
       ]
     }
   ]
 }
-
 const activeIndex = ref('0-0')
+
+const currentTitle = ref("全部项目")
+provide('title',currentTitle)
+
+const newButton = ref("新建项目")
+const useProject = useProjectStore()
 </script>
 
 <template>
@@ -61,14 +72,24 @@ const activeIndex = ref('0-0')
       </el-icon>
       <el-text class="px-4 ">项目管理</el-text>
     </template>
+
     <template #content>
-      <inner-side-bar>
+      <!--              此处展示标题-->
+      <inner-side-bar
+          v-model="currentTitle"
+          :newButton = "newButton"
+      >
         <template #subMenu>
           <el-menu
               class="w-full"
               :default-active="activeIndex"
           >
-            <sub-menu :menu="menu"/>
+<!--            点击修改标题-->
+            <sub-menu
+                :menu="menu"
+                v-model:title="currentTitle"
+                v-model:stars="useProject.star_projects"
+            />
           </el-menu>
         </template>
       </inner-side-bar>
@@ -77,5 +98,8 @@ const activeIndex = ref('0-0')
 </template>
 
 <style scoped>
-
+:deep(.is-active){
+  background-color: #d4e5fa !important;
+  color: #7ac3f1 !important;
+}
 </style>

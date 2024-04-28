@@ -11,6 +11,7 @@ export interface UserInfo {
     avatar?:string,
     background?:string,
     create_time:string,
+    role:number
 }
 
 export interface UserRegister{

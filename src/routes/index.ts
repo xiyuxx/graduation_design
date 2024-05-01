@@ -17,14 +17,19 @@ import WorkDashboards from "../views/workStation/dashboards/Index.vue"
 import WorkSpace from "../views/WorkSpace.vue";
 import Register from "../views/Register.vue";
 
+
 const routes = [
     {
         path:'/login',
         component: Login
     },
     {
-      path:'/register',
+        path:'/register',
         component: Register
+    },
+    {
+        path:'/create/:work_type',
+        component: ()=>import("../components/Creator.vue")
     },
     {
         path:'/',
@@ -96,31 +101,11 @@ const routes = [
                         redirect: '/pjm/projects'
                     },
                     {
-                        path: 'projects',
+                        path: 'projects',//查看所有项目
                         component: ()=>import("../views/pjManagement/Projects.vue"),
-                        children: [
-                            {
-                                path: ':logo',
-                                component: ()=>import("../views/pjManagement/ProjectDetail.vue")
-                            }
-                        ]
+
                     },
-                    {
-                        path: 'organization',
-                        component: ()=>import("../views/pjManagement/Organization.vue")
-                    },
-                    {
-                        path: 'portfolios',
-                        component: ()=>import("../views/pjManagement/Portfolios.vue")
-                    },
-                    {
-                        path: 'queries',
-                        component: ()=>import("../views/pjManagement/Queries.vue")
-                    },
-                    {
-                        path: 'team',
-                        component: ()=>import("../views/pjManagement/Team.vue")
-                    }
+
                 ]
             },
             {
@@ -163,7 +148,13 @@ const routes = [
             }
         ]
     },
+    {
+        path:'/project/:logo',
+        component: ()=>import("../views/pjManagement/ProjectDetail.vue")
+    },
+    {
 
+    }
 ]
 
 const router = createRouter({

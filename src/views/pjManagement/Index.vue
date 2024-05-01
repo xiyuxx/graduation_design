@@ -7,6 +7,7 @@ import SubMenu from "../../components/SubMenu.vue";
 import {Menu} from "../../types/subMenu";
 import {provide, ref} from "vue";
 import {useProjectStore} from "../../stores/project.ts";
+import {WINDOW_TYPES} from "../../types/multiWindow.ts";
 
 
 const menu:Menu = {
@@ -32,7 +33,6 @@ const menu:Menu = {
           itemName:'团队项目',
           itemPath:'/team',
           itemColor:'#394c86'
-
         },
       ]
     },
@@ -78,6 +78,7 @@ const useProject = useProjectStore()
       <inner-side-bar
           v-model="currentTitle"
           :newButton = "newButton"
+          :work_type="WINDOW_TYPES.PROJECT"
       >
         <template #subMenu>
           <el-menu
@@ -87,6 +88,7 @@ const useProject = useProjectStore()
 <!--            点击修改标题-->
             <sub-menu
                 :menu="menu"
+                :types="WINDOW_TYPES.PROJECT"
                 v-model:title="currentTitle"
                 v-model:stars="useProject.star_projects"
             />

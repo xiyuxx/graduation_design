@@ -7,3 +7,15 @@ export interface Project {
     admin_name:string,
     if_star:boolean
 }
+
+export interface WorkItem {
+    id:string,
+    name:string,
+    item_type?:string,
+    create_time:string,
+    father_item?:number,
+    priority?:string,
+    principal_name?:string,
+    principal_avatar?:string,
+    description:string
+}

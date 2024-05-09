@@ -2,7 +2,8 @@ enum WINDOW_TYPES {
     PROJECT,
     TEST,
     WIKI,
-    TOPIC
+    TOPIC,
+    DISCUSS
 }
 
 export {WINDOW_TYPES}

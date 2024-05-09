@@ -1,5 +1,5 @@
 export interface UserInfo {
-    user_id:string,
+    id:string,
     name:string,
     pwd:string,
     organization:string,

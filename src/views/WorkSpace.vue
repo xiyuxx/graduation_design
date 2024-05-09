@@ -4,7 +4,7 @@ import {
   HomeFilled,
   Files,
   Finished,
-  Management
+  Management, ChatDotRound
 } from "@element-plus/icons-vue";
 import {useUserStore} from "../stores/user.ts";
 import {useRouter} from "vue-router";
@@ -54,6 +54,13 @@ const handleLogout = function (){
               <template #title>知识管理</template>
             </el-menu-item>
           </router-link>
+          <router-link to="/team">
+            <el-menu-item index="5">
+              <el-icon><ChatDotRound/></el-icon>
+              <template #title>话题讨论</template>
+            </el-menu-item>
+          </router-link>
+
 
           <el-menu-item>
             <el-button @click="handleLogout">登出</el-button>

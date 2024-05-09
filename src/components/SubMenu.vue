@@ -16,6 +16,7 @@ console.log(menu.defaultPath)
 const currentTitle = defineModel('title')
 const stars = defineModel('stars',{required:false})
 const changeTitle = (title)=>{
+
   currentTitle.value = title
 }
 const useProject = useProjectStore()

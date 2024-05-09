@@ -7,7 +7,7 @@ export const enter_workSpace = ()=> {
         "resizable": true,
         "title": "SDA",
         "width": 1300,
-        "height": 900,
+        "height": 800,
         "center":true,
         "url": "/workStation"
     })
@@ -48,21 +48,21 @@ export const open_project = (types:WINDOW_TYPES,logo:string)=>{
     }else if(types === WINDOW_TYPES.TEST){
         //TODO
     }else if(types === WINDOW_TYPES.WIKI){
-        //TODO
+        console.log("尝试创建空间详情页面")
+        create_window("/wiki/",logo)
     }else if(types === WINDOW_TYPES.TOPIC){
         //TODO
     }else{
         //TODO
     }
 }
-
-const create_window = (url_prefix:string,logo:string)=> {
-    const webview = new WebviewWindow('project',{
+export const create_window = (url_prefix:string,logo:string)=> {
+    const webview = new WebviewWindow('project'+logo,{
         "fullscreen": false,
         "resizable": true,
-        "title": "Info",
+        "title": logo,
         "center":true,
-        "width": 1300,
+        "width": 1100,
         "height": 900,
         "url": url_prefix + logo
     })
@@ -74,14 +74,16 @@ const create_window = (url_prefix:string,logo:string)=> {
     })
 }
 
-const creator_window = (work_types:WINDOW_TYPES)=>{
-    const webview = new WebviewWindow('creator',{
+
+// used in create window for new project/test hub/topic or topic
+export const creator_window = (work_types:WINDOW_TYPES)=>{
+    const webview = new WebviewWindow('creator'+work_types,{
         "fullscreen": false,
         "resizable": true,
         "title": "Creator",
         "center":true,
-        "width": 1300,
-        "height": 900,
+        "width": 600,
+        "height": 400,
         "url": "/creator/"+work_types
     })
     webview.once('tauri://created',function (){
@@ -92,3 +94,7 @@ const creator_window = (work_types:WINDOW_TYPES)=>{
     })
 }
 
+export const close_creator = (work_types:WINDOW_TYPES)=>{
+    const workSpace_window = WebviewWindow.getByLabel('creator'+work_types)
+    workSpace_window?.close()
+}

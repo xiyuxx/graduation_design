@@ -12,6 +12,7 @@ import {
 import {Project, WorkItem} from "../types/project";
 import {formatDateTime} from "../utils/time.ts";
 import {Body} from "@tauri-apps/api/http";
+import qs from "qs";
 
 
 export const useProjectStore = defineStore('project',()=> {
@@ -29,7 +30,7 @@ export const useProjectStore = defineStore('project',()=> {
             await http<ReqResult<AllProjectResult>>('/project/get_project',{
                 method:'GET',
                 params:{
-                    user_id,
+                    id:user_id,
                 }
             }).then((req_info)=> {
                 let data = req_info.data
@@ -55,11 +56,9 @@ export const useProjectStore = defineStore('project',()=> {
     }
 
     async function get_current_work_items(){
-        if(current_project){
-            // 清除原有工作项
-            if(current_work_items.length > 0){
-                current_work_items.splice(0,current_work_items.length)
-            }
+        console.log("开始请求数据项")
+        show_work_items.splice(0,current_work_items.length)
+        console.log("删掉了吗")
             let id = current_project.value!.id
             await http<ReqResult<AllWorkItemResult>>('/item/get_items',{
                 method:'GET',
@@ -79,7 +78,7 @@ export const useProjectStore = defineStore('project',()=> {
             }).catch(err=>{
                 console.log("请求工作项出错了",err)
             })
-        }
+
     }
     function get_project_by_logo(logo:string){
         console.log("根据logo找项目")
@@ -87,7 +86,6 @@ export const useProjectStore = defineStore('project',()=> {
         console.log("找到的",current_project.value)
         return current_project.value
     }
-
 
     async function handle_star(star:string,pro_id:string,user_id:string) {
         const body = Body.form({
@@ -107,6 +105,40 @@ export const useProjectStore = defineStore('project',()=> {
         })
     }
 
+    async function create(name:string,logo:string,organization:string,userId:string,if_private= false){
+        const body = Body.form({
+            name,logo,organization,userId,private:if_private.toString()
+        })
+        await http<ReqResult<SingleEditResult>>('/project/set_project',{
+            method:'POST',
+            body
+        }).then((req_info)=>{
+            if(req_info.data.success){
+                return true
+            }
+        }).catch((err)=>{
+            console.log(err)
+            return false
+        })
+    }
+
+    async function add_partners(partners:Array<string>,pro_id:string){
+        const body = Body.form({
+            partners:qs.stringify(partners),
+            project_id:pro_id
+        })
+        await http<ReqResult<SingleEditResult>>('/project/add_workmate',{
+            method:'POST',
+            body
+        }).then((req_info)=>{
+            if(req_info.data.success){
+                return true
+            }
+        }).catch((err)=>{
+            console.log(err)
+            return false
+        })
+    }
     function get_projects_length(){
         return projects.length
     }
@@ -129,10 +161,9 @@ export const useProjectStore = defineStore('project',()=> {
     function find_project_by_logo(logo:string){
         current_project.value = projects.find(pro => pro.logo === logo)
         return !!current_project;
-
     }
     return {get_all,get_project_by_logo,update_project_star,handle_star,
-        get_projects_length,find_project_by_logo,get_current_work_items,
+        get_projects_length,find_project_by_logo,get_current_work_items,create,add_partners,
         projects,star_projects,current_project,current_work_items,show_work_items
     }
 },{persist:true})

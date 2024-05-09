@@ -1,4 +1,5 @@
 import {Project, WorkItem} from "./project";
+import {UserInfo} from "./user";
 
 export interface ReqResult<T>{
     data:T,
@@ -25,8 +26,17 @@ type ProjectCollector = {
 type WorkItemCollector = {
     collector:WorkItem[]
 }
+
+type UserInfoCollector = {
+    collector:UserInfo[]
+}
+type ArticleCollector = {
+    collector:Article[]
+}
 type FailureResult = { Failure: null };
 type RegisterResult = RegisterSuccessResult | FailureResult;
 type SingleEditResult = SingleEditSuccessResult | FailureResult;
 type AllProjectResult = ProjectCollector | FailureResult;
 type AllWorkItemResult = WorkItemCollector | FailureResult;
+type AllMemberResult = UserInfoCollector | FailureResult;
+type AllArticleResult = ArticleCollector | FailureResult;

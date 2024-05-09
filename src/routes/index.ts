@@ -28,7 +28,7 @@ const routes = [
         component: Register
     },
     {
-        path:'/create/:work_type',
+        path:'/creator/:work_type',
         component: ()=>import("../components/Creator.vue")
     },
     {
@@ -143,8 +143,22 @@ const routes = [
                 ]
             },
             {
-                path: '/wiki',
-                component: ()=>import("../views/wiki/Index.vue")
+                path: '/team',
+                component: ()=>import("../views/team/Index.vue"),
+            },
+            {
+                path:'/wiki',
+                component: ()=>import("../views/wiki/Index.vue"),
+                children: [
+                    {
+                        path:'',
+                        redirect: '/wiki/spaces'
+                    },
+                    {
+                        path:'spaces',
+                        component:()=>import("../views/wiki/Spaces.vue")
+                    }
+                ]
             }
         ]
     },
@@ -153,7 +167,12 @@ const routes = [
         component: ()=>import("../views/pjManagement/ProjectDetail.vue")
     },
     {
-
+        path:'/wiki/:logo',
+        component: ()=>import("../views/wiki/WikiDetail.vue")
+    },
+    {
+        path:'/topic/:logo',
+        component: ()=>import("../views/team/TopicDetail.vue")
     }
 ]
 

@@ -1,13 +1,14 @@
 import {defineStore} from "pinia";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {UserEditor, UserInfo, UserLogin, UserRegister} from "../types/user";
 
 import {
+    AllMemberResult,
     RegisterResult,
     RegisterSuccessResult,
     ReqResult,
     SingleEditResult,
-    SingleEditSuccessResult
+    SingleEditSuccessResult, UserInfoCollector
 } from "../types/result";
 import http from "../utils/axios.ts";
 import {Body} from "@tauri-apps/api/http";
@@ -19,7 +20,6 @@ export const useUserStore = defineStore('user',()=>{
     const user_name = ref("");
     const org_id = ref("");
     const org_name = ref("");
-
     const phone = ref("");
     const avatar = ref("");
     const background = ref("");
@@ -28,6 +28,8 @@ export const useUserStore = defineStore('user',()=>{
     const email = ref("");
     const create_time = ref("")
     const role = ref(1)
+
+    const members = reactive<UserInfo[]>([])
 
     const if_req = ref(false);
 
@@ -72,7 +74,7 @@ export const useUserStore = defineStore('user',()=>{
                 if_req.value = true;
 
                 let user_info = data.data
-                user_id.value = user_info.user_id;
+                user_id.value = user_info.id;
                 user_name.value = user_info.name;
                 org_id.value = user_info.organization;
                 org_name.value = user_info.org_name;
@@ -118,6 +120,29 @@ export const useUserStore = defineStore('user',()=>{
     function if_login() {
         return if_req.value
     }
+
+    async function get_members(org_id:string){
+        console.log("怎么回事！！",org_id)
+        if(role.value == 0){
+            await http<ReqResult<AllMemberResult>>('/user/get_partners',{
+                method:'GET',
+                params:{
+                    org_id
+                }
+            }).then((req_info)=>{
+                let data = req_info.data
+                if(data.success){
+                    let items_info = (data.data as UserInfoCollector).collector
+                    for (let i = 0; i < items_info.length; i++){
+                        members.push(items_info[i])
+                    }
+                }
+            }).catch((err)=>{
+                console.log(err)
+                console.log("请求成员出错了")
+            })
+        }
+    }
     function $reset(){
         user_id.value = "";
         user_name.value = "";
@@ -136,7 +161,7 @@ export const useUserStore = defineStore('user',()=>{
     }
 
     return {
-        register,login,update,if_login,$reset,
-        user_id,user_name,avatar,role
+        register,login,update,if_login,$reset,get_members,
+        user_id,user_name,avatar,role,members,org_id
     }
 } ,{persist:true})

@@ -49,7 +49,6 @@ export const useProjectStore = defineStore('project',()=> {
                     console.log(projects)
                 }
             }).catch(err=>{
-
                 console.log(err)
             })
         }
@@ -122,23 +121,28 @@ export const useProjectStore = defineStore('project',()=> {
         })
     }
 
-    async function add_partners(partners:Array<string>,pro_id:string){
+    async function add_partners(partners:Array<string>,logo:string){
         const body = Body.form({
             partners:qs.stringify(partners),
-            project_id:pro_id
+            logo
         })
-        await http<ReqResult<SingleEditResult>>('/project/add_workmate',{
-            method:'POST',
-            body
-        }).then((req_info)=>{
-            if(req_info.data.success){
-                return true
+        try {
+            const req_info = await http<ReqResult<SingleEditResult>>('/project/add_workmate', {
+                method: 'POST',
+                body
+            });
+
+            if (req_info.data.success) {
+                return true;
+            } else {
+                return false;
             }
-        }).catch((err)=>{
-            console.log(err)
-            return false
-        })
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
     }
+
     function get_projects_length(){
         return projects.length
     }

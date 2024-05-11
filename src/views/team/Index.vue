@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import {provide, ref} from "vue";
-import {Management, Search} from "@element-plus/icons-vue";
+import {onMounted, provide, ref} from "vue";
+import {Management, Search, StarFilled} from "@element-plus/icons-vue";
 import {Menu} from "../../types/subMenu";
 import {WINDOW_TYPES} from "../../types/multiWindow.ts";
 import {useTopicStore} from "../../stores/topic.ts";
 import {useUserStore} from "../../stores/user.ts";
 import {creator_window} from "../../utils/window.ts";
 import {ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
 
 const talk_menu:Menu = {
   defaultPath: '/team/discuss/posts',
@@ -36,7 +37,6 @@ const talk_menu:Menu = {
     }
   ]
 }
-
 const topic_menu:Menu = {
   defaultPath:'/team/discuss/topics',
   menus:[
@@ -66,10 +66,17 @@ const topic_menu:Menu = {
   ]
 }
 
-const currentTitle = ref("全部讨论")
+const currentTitle = ref("全部话题")
 const newButton = ref("新建话题")
 provide('title',currentTitle)
+
+
+
+const router = useRouter()
 const changeTalk = (title)=>{
+  if(router.currentRoute.value.fullPath === "/team/topics"){
+    router.push("/team/discusses")
+  }
   newButton.value = "新建讨论"
   currentTitle.value = title
   // TODO 需要修改！！
@@ -77,12 +84,15 @@ const changeTalk = (title)=>{
   types.value = '讨论'
 }
 const changeTopic = (title)=>{
+  if(router.currentRoute.value.fullPath === "/team/discusses"){
+    router.push("/team/topics")
+  }
   newButton.value = "新建话题"
   currentTitle.value = title
   count.value = useTopic.topics.length
   types.value = '话题'
 }
-const activeIndex = ref('0-0')
+const activeIndex = ref('topic0-0')
 
 const useTopic = useTopicStore()
 const useUser = useUserStore()
@@ -90,6 +100,9 @@ const useUser = useUserStore()
 const count = ref(0)
 const types = ref('讨论')
 
+const handle_star = async (star:string, topic_id:string) => {
+  await useTopic.handle_star(star,topic_id,useUser.user_id)
+}
 const handle_new = ()=>{
   if(newButton.value === '新建话题'){
     creator_window(WINDOW_TYPES.TOPIC)
@@ -119,23 +132,31 @@ const handle_new = ()=>{
               <el-menu-item-group :title="part.title" >
                 <el-menu-item
                     v-for="(item,j) in part.items"
-                    :index="i + '-' + j"
+                    :index="'discuss' + i + '-' + j"
                     @click="changeTalk(item.itemName)"
-                    class="mr-4  rounded-md h-10 mb-4">
+                    class="mr-4 rounded-md h-10 mb-4">
                   <el-icon>
                     <component :is="item.itemIcon" :color="item.itemColor"/>
                   </el-icon>
                   <el-text>{{item.itemName}}</el-text>
                 </el-menu-item>
               </el-menu-item-group>
-            </template>
+            </template >
+            <el-menu-item-group title="星标" v-if="useTopic.star_topics.length > 0">
+              <el-menu-item v-for="pro in useTopic.star_topics" class="mr-4 rounded-md h-10 mb-4 flex justify-between">
+                <el-text>{{pro.name}}</el-text>
+                <el-icon @click="handle_star('false',pro.id)">
+                  <StarFilled class="text-yellow-500"/>
+                </el-icon>
+              </el-menu-item>
+            </el-menu-item-group>
             <template v-for="(part,i) in topic_menu.menus" class="font-medium" >
               <el-menu-item-group :title="part.title" >
                 <el-menu-item
                     v-for="(item,j) in part.items"
-                    :index="i + '-' + j"
+                    :index= "'topic' + i + '-' + j"
                     @click="changeTopic(item.itemName)"
-                    class="mr-4  rounded-md h-10 mb-4">
+                    class="mr-4 rounded-md h-10 mb-4">
                   <el-icon>
                     <component :is="item.itemIcon" :color="item.itemColor"/>
                   </el-icon>
@@ -147,7 +168,7 @@ const handle_new = ()=>{
         </el-aside>
         <el-main class="w-auto">
           <el-header class="flex-col  w-full">
-            <div  class="flex justify-between">
+            <div class="flex justify-between">
               <el-text class="text-2xl text-black ">{{currentTitle}}</el-text>
               <el-button v-show="useUser.role === 0" size="large" @click="handle_new">{{newButton}}</el-button>
             </div>

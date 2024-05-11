@@ -1,4 +1,8 @@
-interface Article{
+export interface Article extends ArticleGetter{
+    children:Article[],
+}
+
+export interface ArticleGetter{
     id:number,
     father_id?:number,
     last_update:string,
@@ -6,5 +10,11 @@ interface Article{
     update_avatar?:string,
     title:string,
     content:string,
-    children:Article[],
+}
+
+export interface ArticleSetter{
+    title:string,
+    content:string,
+    update_id:string
+    father_id:number,
 }

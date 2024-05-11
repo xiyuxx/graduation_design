@@ -60,7 +60,9 @@ const http = <T>(url: string, options: any = {}):Promise<{data:T}> => {
     return fetch(buildURL(buildFullPath(baseURL, url), params), options)
         .then(({ status, data ,headers}) => {
             if (status >= 200 && status < 400) {
-                localStorage.setItem("_token",headers['_token'])
+                if(!localStorage.getItem("_token")){
+                    localStorage.setItem("_token",headers['_token'])
+                }
                 return { data } as {data:T}
             }
             return Promise.reject({ status, data })

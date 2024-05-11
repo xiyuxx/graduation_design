@@ -6,14 +6,9 @@ function getRandomColor(): string {
     const randomIndex = Math.floor(Math.random() * colors.length);
     return colors[randomIndex].replace('#','');
 }
-
 const url = "https://ui-avatars.com/api"
-
-// 发送 GET 请求
-
 const fetchAvatar = (name:string) => {
     return url + "?rounded=true&background="+ getRandomColor()+"&color=ffffff&name=" + name
-
 }
 
 export {fetchAvatar}

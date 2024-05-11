@@ -8,6 +8,7 @@ import {useUserStore} from "../stores/user.ts";
 import {useProjectStore} from "../stores/project.ts";
 import {close_creator} from "../utils/window.ts";
 import {useWikiStore} from "../stores/wiki.ts";
+import {useTopicStore} from "../stores/topic.ts";
 
 const useUser = useUserStore()
 onMounted(()=>{
@@ -31,6 +32,7 @@ onMounted(()=>{
       useStore = useWikiStore()
     }else if(work_type == 3){
       types.value = "话题"
+      useStore = useTopicStore()
     }else if(work_type == 4){
       types.value = "讨论"
     }
@@ -87,12 +89,14 @@ const rules = reactive<FormRules<RuleForm>>({
 
 const submitForm = async (formEl: FormInstance | undefined,ruleForm) => {
   if (!formEl) return
-  await formEl.validate((valid, fields) => {
+  await formEl.validate(async (valid, fields) => {
     if (valid) {
-      console.log(ruleForm)
-      let res = useStore.create(ruleForm.name,ruleForm.logo,useUser.org_id,useUser.user_id)
+      let res = await useStore.create(ruleForm.name,ruleForm.logo,useUser.org_id,useUser.user_id)
+      await useStore.add_partners(ruleForm.members,ruleForm.logo)
+      console.log(res)
       if(res){
-          close_creator(work_type as number)
+        useStore.update(ruleForm.members,ruleForm.logo)
+        close_creator(work_type as number)
       }
     } else {
       console.log('error submit!', fields)
@@ -110,7 +114,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
 <template>
   <el-form
       ref="ruleFormRef"
-
       :model="ruleForm"
       :rules="rules"
       label-width="auto"
@@ -126,6 +129,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
     </el-form-item>
     <el-form-item label="描述" prop="description">
       <el-input v-model="ruleForm.description" type="textarea" />
+    </el-form-item>
+    <el-form-item label="可见性">
+      <el-select v-model="ruleForm.is_private" placeholder="确定可见性">
+        <el-option label="公开" value="true" />
+        <el-option label="私有" value="false" />
+      </el-select>
     </el-form-item>
     <el-form-item label="选择成员" prop="members">
       <el-select v-model="ruleForm.members" placeholder="成员" multiple>

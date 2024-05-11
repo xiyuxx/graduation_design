@@ -1,5 +1,7 @@
-import {Project, WorkItem} from "./project";
+import {Partner, Project, WorkItem} from "./project";
 import {UserInfo} from "./user";
+import {Article} from "./wiki";
+import {Discuss, IComment, Reply} from "./topic";
 
 export interface ReqResult<T>{
     data:T,
@@ -33,6 +35,19 @@ type UserInfoCollector = {
 type ArticleCollector = {
     collector:Article[]
 }
+type CommentCollector = {
+    collector:IComment[]
+}
+type ReplyCollector = {
+    collector:Reply[]
+}
+type DiscussCollector = {
+    collector:Discuss[]
+}
+
+type PartnerCollector = {
+    collector:Partner[]
+}
 type FailureResult = { Failure: null };
 type RegisterResult = RegisterSuccessResult | FailureResult;
 type SingleEditResult = SingleEditSuccessResult | FailureResult;
@@ -40,3 +55,7 @@ type AllProjectResult = ProjectCollector | FailureResult;
 type AllWorkItemResult = WorkItemCollector | FailureResult;
 type AllMemberResult = UserInfoCollector | FailureResult;
 type AllArticleResult = ArticleCollector | FailureResult;
+type AllCommentResult = CommentCollector | FailureResult
+type AllReplyResult = ReplyCollector | FailureResult;
+type AllDiscussResult = DiscussCollector | FailureResult;
+type AllPartnerResult = PartnerCollector | FailureResult;

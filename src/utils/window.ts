@@ -51,7 +51,8 @@ export const open_project = (types:WINDOW_TYPES,logo:string)=>{
         console.log("尝试创建空间详情页面")
         create_window("/wiki/",logo)
     }else if(types === WINDOW_TYPES.TOPIC){
-        //TODO
+        console.log("尝试创建讨论详情页面")
+        create_window("/topic/",logo)
     }else{
         //TODO
     }

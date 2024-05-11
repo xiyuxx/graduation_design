@@ -103,7 +103,6 @@ const routes = [
                     {
                         path: 'projects',//查看所有项目
                         component: ()=>import("../views/pjManagement/Projects.vue"),
-
                     },
 
                 ]
@@ -145,6 +144,20 @@ const routes = [
             {
                 path: '/team',
                 component: ()=>import("../views/team/Index.vue"),
+                children: [
+                    {
+                        path:'',
+                        redirect: '/team/topics'
+                    },
+                    {
+                        path:'topics',
+                        component:()=>import("../views/team/Topics.vue")
+                    },
+                    {
+                        path:'discusses',
+                        component:()=>import("../views/team/Discusses.vue")
+                    }
+                ]
             },
             {
                 path:'/wiki',

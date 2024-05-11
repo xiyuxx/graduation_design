@@ -11,6 +11,8 @@ import {
 import http from "../utils/axios.ts";
 import {formatDateTime} from "../utils/time.ts";
 import {Body} from "@tauri-apps/api/http";
+import { ArticleGetter} from "../types/wiki";
+import qs from "qs";
 
 
 export const useWikiStore = defineStore('wiki',()=>{
@@ -19,8 +21,8 @@ export const useWikiStore = defineStore('wiki',()=>{
     const star_spaces = reactive<Project[]>([])
     const show_spaces = reactive<Project[]>([])
 
-    const show_articles = reactive<Article[]>([])
-    const current_articles = reactive<Article[]>([])
+    const show_articles = reactive<ArticleGetter[]>([])
+    const current_articles = reactive<ArticleGetter[]>([])
     const current_space = ref<Project>()
 
     const if_req = ref(false)
@@ -53,7 +55,34 @@ export const useWikiStore = defineStore('wiki',()=>{
             })
     }
     }
-
+    async function update(user_id:string){
+        await http<ReqResult<AllProjectResult>>('/wiki/get_wiki',{
+            method:'GET',
+            params:{
+                id:user_id
+            }
+        }).then((req_info)=>{
+            let data = req_info.data
+            console.log("请求所有空间数据")
+            if(data.success){
+                let project_info = (data.data as ProjectCollector).collector
+                spaces.splice(0,spaces.length)
+                show_spaces.splice(0,show_spaces.length)
+                star_spaces.splice(0,star_spaces.length)
+                for (let i = 0; i < project_info.length; i++) {
+                        project_info[i].last_update = formatDateTime(project_info[i].last_update)
+                        spaces.push(project_info[i])
+                        show_spaces.push(project_info[i])
+                        if(project_info[i].if_star){
+                            star_spaces.push(project_info[i])
+                        }
+                    }
+                    console.log(spaces)
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+    }
     async function handle_star(star:string,pro_id:string,user_id:string) {
         const body = Body.form({
             star,
@@ -117,7 +146,7 @@ export const useWikiStore = defineStore('wiki',()=>{
             })
         }else{
             body = Body.form({
-                wiki_id,title,content,update_id
+                wiki_id,title,content,update_id,father_id:"0"
             })
         }
         await http<ReqResult<SingleEditResult>>("/wiki/set",{
@@ -146,6 +175,7 @@ export const useWikiStore = defineStore('wiki',()=>{
                 wiki_id,id,title,content,update_id
             })
         }
+        console.log("body",body)
         await http<ReqResult<SingleEditResult>>("/wiki/set",{
             method:'POST',
             body
@@ -163,7 +193,6 @@ export const useWikiStore = defineStore('wiki',()=>{
     // TODO 最初查询时仅查询title、id、father_id用于文章展示，到点击时才请求内容信息
     async function get_current_articles(){
         show_articles.splice(0,current_articles.length)
-
         let id = current_space.value!.id
         await http<ReqResult<AllArticleResult>>("/wiki/all",{
             method:'GET',
@@ -183,7 +212,45 @@ export const useWikiStore = defineStore('wiki',()=>{
             console.log(err)
         })
     }
-
+    async function add_partners(partners:Array<string>,logo:string){
+        const body = Body.form({
+            partners:qs.stringify(partners),
+            logo
+        })
+        await http<ReqResult<SingleEditResult>>('/wiki/add_workmate',{
+            method:'POST',
+            body
+        }).then((req_info)=>{
+            if(req_info.data.success){
+                return true
+            }
+        }).catch((err)=>{
+            console.log(err)
+            return false
+        })
+    }
+    async function update_current_articles(){
+        current_articles.splice(0,current_articles.length)
+        show_articles.splice(0,show_articles.length)
+        let id = current_space.value!.id
+        await http<ReqResult<AllArticleResult>>("/wiki/all",{
+            method:'GET',
+            params:{
+                wiki_id:id
+            }
+        }).then((req_info)=>{
+            let data = req_info.data
+            if(data.success){
+                let items_info = (data.data as ArticleCollector).collector
+                for (let i = 0; i < items_info.length; i++){
+                    current_articles.push(items_info[i])
+                    show_articles.push(items_info[i])
+                }
+            }
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
     function get_space_by_logo(logo:string){
         console.log("根据logo找项目")
         current_space.value =  spaces.find(pro => pro.logo === logo)
@@ -191,6 +258,7 @@ export const useWikiStore = defineStore('wiki',()=>{
         return current_space.value
     }
     return {get_all,create,handle_star,get_spaces_length,get_current_articles,
-        get_space_by_logo,set_article,create_article,
+        get_space_by_logo,set_article,create_article,update_current_articles,update,
+        add_partners,
         spaces,star_spaces,show_spaces,current_space,show_articles}
 },{persist:true})

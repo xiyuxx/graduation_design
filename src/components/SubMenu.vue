@@ -16,12 +16,11 @@ console.log(menu.defaultPath)
 const currentTitle = defineModel('title')
 const stars = defineModel('stars',{required:false})
 const changeTitle = (title)=>{
-
   currentTitle.value = title
 }
 const useProject = useProjectStore()
 const useUser = useUserStore()
-const star_color = ref("#649b9b")
+const star_color = ref("#d39536")
 const handle_star = (pro_id:string)=>{
   if(types === WINDOW_TYPES.PROJECT){
     useProject.handle_star('false',pro_id,useUser.user_id)
@@ -56,7 +55,7 @@ const handle_star = (pro_id:string)=>{
       <el-menu-item v-for="pro in stars" class="mr-4 rounded-md h-10 mb-4 flex justify-between">
         <el-text>{{pro.name}}</el-text>
         <el-icon :color="star_color" @click="handle_star(pro.id)">
-          <StarFilled/>
+          <StarFilled class="text-yellow-500"/>
         </el-icon>
       </el-menu-item>
     </el-menu-item-group>

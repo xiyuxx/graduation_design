@@ -3,7 +3,7 @@
 </script>
 
 <template>
-
+Discusses组件
 </template>
 
 <style scoped>

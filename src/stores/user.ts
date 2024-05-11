@@ -122,8 +122,7 @@ export const useUserStore = defineStore('user',()=>{
     }
 
     async function get_members(org_id:string){
-        console.log("怎么回事！！",org_id)
-        if(role.value == 0){
+        if(role.value == 0 && members.length == 0){
             await http<ReqResult<AllMemberResult>>('/user/get_partners',{
                 method:'GET',
                 params:{

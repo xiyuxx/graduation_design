@@ -30,3 +30,7 @@ export function formatDateTime(dateTimeString: string): string {
     const minutes = String(dateTime.getMinutes()).padStart(2, '0');
     return `${year}年${month}月${day}日 ${hours}:${minutes}`;
 }
+
+export function getCurrentTime(): string {
+    return formatDateTime(new Date().toISOString());
+}
